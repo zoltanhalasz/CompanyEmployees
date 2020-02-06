@@ -1,0 +1,9 @@
+2020-01-28 12:27:02.3103 ERROR Invalid model state for the EmployeeForCreationDto object
+2020-01-28 12:27:15.1419 INFO Company with id: 53a1237a-3ed3-4462-b9f0-5a7bb1056a33 doesn't exist in the database.
+2020-01-28 12:28:00.2969 INFO Company with id: 53a1237a-3ed3-4462-b9f0-5a7bb1056a33 doesn't exist in the database.
+2020-01-28 12:28:08.2516 INFO Company with id: 53a1237a-3ed3-4462-b9f0-5a7bb1056a33 doesn't exist in the database.
+2020-01-28 12:28:32.7074 INFO Company with id: 53a1237a-3ed3-4462-b9f0-5a7bb1056a33 doesn't exist in the database.
+2020-01-28 12:29:52.0821 ERROR Invalid model state for the EmployeeForCreationDto object
+2020-01-28 12:32:44.2670 ERROR Invalid model state for the EmployeeForCreationDto object
+2020-01-28 12:35:11.7734 ERROR Invalid model state for the EmployeeForCreationDto object
+2020-01-28 12:35:21.1316 ERROR Invalid model state for the EmployeeForCreationDto object
