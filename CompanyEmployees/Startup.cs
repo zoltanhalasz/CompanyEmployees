@@ -37,34 +37,42 @@ namespace CompanyEmployees
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(Startup));
-            services.ConfigureCors();     
+            services.ConfigureCors();
             services.ConfigureIISIntegration();
             services.ConfigureLoggerService();
             services.ConfigureSqlContext(Configuration);
             services.ConfigureRepositoryManager();
-            //services.AddControllers(config => 
-            //{ 
-            //    config.RespectBrowserAcceptHeader = true;
-            //    config.ReturnHttpNotAcceptable = true;
-            //}).AddXmlDataContractSerializerFormatters().AddCustomCSVFormatter();
-            //services.AddControllers();
-            services.AddControllers(config => 
-                {
-                    config.RespectBrowserAcceptHeader = true;
-                    config.ReturnHttpNotAcceptable = true;
-                    config.OutputFormatters.Add(new CsvOutputFormatter()); 
-                }).AddNewtonsoftJson()
-                .AddXmlDataContractSerializerFormatters()
-                .AddCustomCSVFormatter();
-            services.AddCustomMediaTypes();
-            services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
+            services.AddAutoMapper(typeof(Startup));
             services.AddScoped<ValidationFilterAttribute>();
             services.AddScoped<ValidateCompanyExistsAttribute>();
-            services.AddScoped<ValidateMediaTypeAttribute>();
             services.AddScoped<ValidateEmployeeForCompanyExistsAttribute>();
+
             services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
+
+            services.AddScoped<ValidateMediaTypeAttribute>();
+
             services.AddScoped<EmployeeLinks>();
+
+            services.ConfigureVersioning();
+
+            services.ConfigureResponseCaching();
+            services.ConfigureHttpCacheHeaders();
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+
+            services.AddControllers(config =>
+            {
+                config.RespectBrowserAcceptHeader = true;
+                config.ReturnHttpNotAcceptable = true;
+                config.CacheProfiles.Add("120SecondsDuration", new CacheProfile { Duration = 120 });
+            }).AddNewtonsoftJson()
+           .AddXmlDataContractSerializerFormatters()
+           .AddCustomCSVFormatter();
+
+            services.AddCustomMediaTypes();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,19 +82,24 @@ namespace CompanyEmployees
             {
                 app.UseDeveloperExceptionPage();
             }
-            else 
+            else
             {
-                app.UseHsts(); 
+                app.UseHsts();
             }
+
             app.ConfigureExceptionHandler(logger);
             app.UseHttpsRedirection();
-
             app.UseStaticFiles();
-            app.UseCors("CorsPolicy"); 
+
+            app.UseCors("CorsPolicy");
+
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.All
             });
+
+            app.UseResponseCaching();
+            //app.UseHttpCacheHeaders();
 
             app.UseRouting();
 
